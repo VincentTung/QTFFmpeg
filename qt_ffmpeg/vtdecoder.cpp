@@ -96,19 +96,11 @@ void VTDecoder::openFile(const char* filePath){
         qDebug()<< "open codec failed";
         return;
     }
-    //读取数据
-    //分配内存空间
-
+\
     int width =codecParameter->width;
     int height = codecParameter->height;
 
     int bit_reate = codecParameter->bit_rate;
-//    AVMEDIA_TYPE_VIDEO 0,
-//    AVMEDIA_TYPE_AUDIO 1,
-//    AVMEDIA_TYPE_DATA  2,          ///< Opaque data information usually continuous
-//    AVMEDIA_TYPE_SUBTITLE 3,
-//    AVMEDIA_TYPE_ATTACHMENT 4,    ///< Opaque data information usually sparse
-//    AVMEDIA_TYPE_NB 5
     int codec_type = codecParameter->codec_type;
 
     int formate = codecParameter->format;
@@ -131,7 +123,14 @@ void VTDecoder::openFile(const char* filePath){
      <<" aspectRation:(num:"<<sample_aspect_ratio.num<<",den:"<<sample_aspect_ratio.den<<")";
    av_dump_format(formatContext, 0, filePath, false);
     AVPacket* packet = av_packet_alloc();
-    AVFrame* decodingFrame = av_frame_alloc();
+//    AVFrame* decodingFrame = av_frame_alloc();
+    if(m_frames == nullptr){
+
+        qDebug()<<"m_frames is null";
+
+        return ;
+    }
+    AVFrame* decodingFrame = m_frames->decodingFrame();
 
     while(av_read_frame(formatContext,packet) >=0){
 
@@ -150,6 +149,8 @@ void VTDecoder::openFile(const char* filePath){
                    if(ret == AVERROR(EAGAIN) || ret == AVERROR_EOF){
                        qDebug()<<"receive break";
                        break;
+                   }else if(ret ==0){
+
                    }
 
                    //解码后的数据
@@ -162,4 +163,14 @@ void VTDecoder::openFile(const char* filePath){
 
        }
 
+}
+
+void VTDecoder::pushFrame()
+{
+    bool previousFrameConsumed = m_frames->offerDecodedFrame();
+    if (!previousFrameConsumed) {
+        // the previous newFrame will consume this frame
+        return;
+    }
+    emit onNewFrame();
 }
