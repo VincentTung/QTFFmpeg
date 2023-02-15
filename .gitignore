@@ -1,0 +1,4 @@
+
+*.idx
+/build-qt_ffmpeg-Desktop_Qt_6_4_1_MinGW_64_bit-Debug
+/build-qt_ffmpeg-Desktop_Qt_6_4_1_MSVC2019_64bit-Debug
