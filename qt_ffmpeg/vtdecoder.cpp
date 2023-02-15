@@ -16,24 +16,10 @@ VTDecoder::VTDecoder()
 {
 
 }
-
-void VTDecoder::setFrames(Frames* frames){
-    this->m_frames = frames;
+void VTDecoder::startDecode(){
+    this->start();
 }
-
-bool VTDecoder::init(){
-
-    #if LIBAVCODEC_VERSION_INT < AV_VERSION_INT(58, 9, 100)
-        av_register_all();
-    #endif
-        if (avformat_network_init()) {
-            return false;
-        }
-        return true;
-
-
-}
-void VTDecoder::openFile(const char* filePath){
+void VTDecoder::run(){
 
     AVFormatContext* formatContext = avformat_alloc_context();
 
@@ -151,10 +137,12 @@ void VTDecoder::openFile(const char* filePath){
                        break;
                    }else if(ret ==0){
 
+                       qDebug()<<"avframe after dcode:"<<decodingFrame->width<<"x"<<decodingFrame->height;
+                       pushFrame();
                    }
 
-                   //解码后的数据
-                   decodingFrame->data;
+//                   //解码后的数据
+//                   decodingFrame->data;
                    qDebug()<<"frame:"<<codec->frame_number;
                }
 
@@ -162,6 +150,27 @@ void VTDecoder::openFile(const char* filePath){
            av_packet_unref(packet);
 
        }
+}
+void VTDecoder::setFrames(Frames* frames){
+    this->m_frames = frames;
+}
+
+bool VTDecoder::init(){
+
+    #if LIBAVCODEC_VERSION_INT < AV_VERSION_INT(58, 9, 100)
+        av_register_all();
+    #endif
+        if (avformat_network_init()) {
+            return false;
+        }
+        return true;
+
+
+}
+void VTDecoder::setFilePath(const char* filePath){
+
+
+    this->filePath = filePath;
 
 }
 

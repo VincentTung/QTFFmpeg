@@ -20,15 +20,13 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
        //初始化Frames
-     m_frames.init();
-     qDebug()<<avcodec_configuration();
-     VTDecoder decoder =  VTDecoder();
-     decoder.setFrames(&m_frames);
-     if(decoder.init()){
-        qDebug()<<"decoder init success";
-        const char* path = "D:/1988.mp4";
-        decoder.openFile(path);
+     if(! m_frames.init()){
+
+         qDebug()<<"frames init failed";
+         return;
      }
+
+     decoder.setFrames(&m_frames);
 
      connect(&decoder, &VTDecoder::onNewFrame, this, [this](){
             if (ui->video_widget->isHidden()) {
@@ -37,12 +35,21 @@ MainWindow::MainWindow(QWidget *parent)
             }
             m_frames.lock();
             const AVFrame *frame = m_frames.consumeRenderedFrame();
-            //qDebug() << "widthxheight:" << frame->width << "x" << frame->height;
-//            updateShowSize(QSize(frame->width, frame->height));
+            qDebug() << "widthxheight:" << frame->width << "x" << frame->height;
+            updateShowSize(QSize(frame->width, frame->height));
             ui->video_widget->setFrameSize(QSize(frame->width, frame->height));
             ui->video_widget->updateTextures(frame->data[0], frame->data[1], frame->data[2], frame->linesize[0], frame->linesize[1], frame->linesize[2]);
             m_frames.unLock();
         },Qt::QueuedConnection);
+     updateShowSize(size());
+     if(decoder.init()){
+        qDebug()<<"decoder init success";
+        const char* path = "D:/1989.mp4";
+        decoder.setFilePath(path);
+        decoder.startDecode();
+     }
+
+
 
 }
 
@@ -51,3 +58,16 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow::updateShowSize(const QSize &newSize)
+{
+    if (m_frameSize != newSize) {
+        m_frameSize = newSize;
+
+        bool vertical = newSize.height() > newSize.width();
+        if (vertical) {
+            resize(VIDEO_FROM_WIDTH, VIDEO_FROM_HEIGHT);
+        } else {
+            resize(VIDEO_FROM_HEIGHT, VIDEO_FROM_WIDTH);
+        }
+    }
+}
