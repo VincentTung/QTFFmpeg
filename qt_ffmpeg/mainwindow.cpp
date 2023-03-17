@@ -31,7 +31,6 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(&decoder, &VTDecoder::onNewFrame, this, [this](){
         if (ui->video_widget->isHidden()) {
-            //                ui->loadingWidget->close();
             ui->video_widget->show();
         }
         m_frames.lock();
@@ -45,7 +44,7 @@ MainWindow::MainWindow(QWidget *parent)
     updateShowSize(size());
     if(decoder.init()){
         qDebug()<<"decoder init success";
-        const char* path = "D:/1988.mp4";
+        const char* path = "D:/1989.mp4";
         decoder.setFilePath(path);
         decoder.startDecode();
     }

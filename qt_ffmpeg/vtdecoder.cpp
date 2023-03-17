@@ -47,7 +47,7 @@ void VTDecoder::run(){
     }
 
     int videoType = -1;
-    for(int i = 0 ; i <formatContext->nb_streams;i++){
+    for(unsigned int i = 0 ; i <formatContext->nb_streams;i++){
 
         AVStream* stream = formatContext->streams[i];
         if(stream->codecpar->codec_type == AVMEDIA_TYPE_VIDEO){
@@ -164,6 +164,7 @@ void VTDecoder::run(){
                 //解码后的数据
                 // decodingFrame->data;
                 qDebug()<<"frame:"<<codec->frame_number;
+                //延时
                 usleep(1000*1000/frameRate);
                 av_packet_unref(packet);
 
@@ -206,10 +207,7 @@ bool VTDecoder::init(){
 
 }
 void VTDecoder::setFilePath(const char* filePath){
-
-
     this->filePath = filePath;
-
 }
 
 void VTDecoder::pushFrame()
