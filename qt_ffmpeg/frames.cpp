@@ -12,8 +12,8 @@ Frames::Frames()
 
 Frames::~Frames()
 {
-
 }
+
 
 bool Frames::init()
 {
