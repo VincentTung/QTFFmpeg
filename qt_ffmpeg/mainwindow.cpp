@@ -19,10 +19,9 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-//    av_log_set_level(AV_LOG_DEBUG) ;
+    av_log_set_level(AV_LOG_DEBUG) ;
     //初始化Frames
     if(! m_frames.init()){
-
         qDebug()<<"frames init failed";
         return;
     }
@@ -35,21 +34,21 @@ MainWindow::MainWindow(QWidget *parent)
         }
         m_frames.lock();
         const AVFrame *frame = m_frames.consumeRenderedFrame();
-        qDebug() << "widthxheight:" << frame->width << "x" << frame->height;
+//        qDebug() << "widthxheight:" << frame->width << "x" << frame->height;
         updateShowSize(QSize(frame->width, frame->height));
         ui->video_widget->setFrameSize(QSize(frame->width, frame->height));
         ui->video_widget->updateTextures(frame->data[0], frame->data[1], frame->data[2], frame->linesize[0], frame->linesize[1], frame->linesize[2]);
         m_frames.unLock();
     },Qt::QueuedConnection);
+
     updateShowSize(size());
+
     if(decoder.init()){
         qDebug()<<"decoder init success";
         const char* path = "D:/1989.mp4";
         decoder.setFilePath(path);
         decoder.startDecode();
     }
-
-
 
 
 }

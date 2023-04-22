@@ -20,9 +20,9 @@ public:
     void updateTextures(quint8* dataY, quint8* dataU, quint8* dataV, quint32 linesizeY, quint32 linesizeU, quint32 linesizeV);
 
 protected:
-    void initializeGL();
-    void paintGL();
-    void resizeGL(int width, int height);
+    void initializeGL() override;
+    void paintGL() override;
+    void resizeGL(int width, int height) override;
 
 private:
     void initShader();
