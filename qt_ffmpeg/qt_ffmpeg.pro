@@ -38,7 +38,14 @@ INCLUDEPATH += $$PWD/third_party/ffmpeg/include
 #        $$PWD/third_party/ffmpeg/lib/swresample.lib  \
 #        $$PWD/third_party/ffmpeg/lib/swscale.lib  \
 
-
+#LIBS += -L$$PWD/third_party/ffmpeg/bin/ -lavcodec-60
+#LIBS += -L$$PWD/third_party/ffmpeg/bin/ -lavdevice-60
+#LIBS += -L$$PWD/third_party/ffmpeg/bin/ -lavfilter-9
+#LIBS += -L$$PWD/third_party/ffmpeg/bin/ -lavformat-60
+#LIBS += -L$$PWD/third_party/ffmpeg/bin/ -lavutil-58
+#LIBS += -L$$PWD/third_party/ffmpeg/bin/ -lpostproc-57
+#LIBS += -L$$PWD/third_party/ffmpeg/bin/ -lswresample-4
+#LIBS += -L$$PWD/third_party/ffmpeg/bin/ -lswscale-7
 
 # *****************************************************
 # Win平台下配置
@@ -69,17 +76,7 @@ LIBS += \
         -L$$PWD/thrid_party/ffmpeg/lib -lswscale.7 \
 }
 
-## *****************************************************
-## Linux平台下配置
-## *****************************************************
-#linux {
-## 依赖模块
-#LIBS += \
-#        -L$$PWD/thrid_party/ffmpeg/lib -lavformat \
-#        -L$$PWD/thrid_party/ffmpeg/lib -lavcodec \
-#        -L$$PWD/thrid_party/ffmpeg/lib -lavutil \
-#        -L$$PWD/thrid_party/ffmpeg/lib -lswscale \
-#}
+
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

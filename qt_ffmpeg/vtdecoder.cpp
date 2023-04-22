@@ -54,10 +54,17 @@ void VTDecoder::run(){
         qDebug()<<"有视频流:"<<video_stream_index;
     }
 
+    qDebug()<<"formateduartion:"<< formatContext->duration;
+
     av_dump_format(formatContext,video_stream_index, filePath,0);
 
     //获取视频流
     AVStream* stream = formatContext->streams[video_stream_index];
+
+
+    int stream_duration  = stream->duration;
+    qDebug()<<"stream_duration:"<<stream_duration<<" stream_av_frame_reate("<<stream->avg_frame_rate.num<<"/"<<stream->avg_frame_rate.den<<")";
+
     //视频流的编码参数
     AVCodecParameters* codecParameter = stream->codecpar;
 
