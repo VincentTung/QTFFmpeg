@@ -1,2 +1,2 @@
 # QTFFmpeg
-use ffmpeg in qt
+在QT中使用ffmpeg
